@@ -16,7 +16,7 @@ echo "-------Ranking best mirrors for Arch----------------"
 echo "-------------------------------------------------"
 timedatectl set-ntp true
 pacman -Sy --noconfirm
-pacman -S pacman-contrib gptfdisk btrfs-progs --noconfirm
+pacman -S pacman-contrib --noconfirm
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
 echo "-------------------------------------------------"
