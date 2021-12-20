@@ -73,6 +73,7 @@ echo "--------------------------------------"
 pacstrap /mnt base base-devel linux linux-firmware linux-headers archlinux-keyring wget libnewt btrfs-progs --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
+echo "DISK=${DISK}" >> ${HOME}/ArchBaseInstall/install.conf
 cp -R ${SCRIPT_DIR} /mnt/root/ArchBaseInstall
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
@@ -91,6 +92,7 @@ mkswap /mnt/opt/swap/swapfile
 swapon /mnt/opt/swap/swapfile
 #The line below is written to /mnt/ but doesn't contain /mnt/, since it's just / for the sysytem itself.
 echo "/opt/swap/swapfile	none	swap	sw	0	0" >> /mnt/etc/fstab #Add swap to fstab, so it KEEPS working after installation.
+
 
 echo "--------------------------------------"
 echo "--   SYSTEM READY FOR 2-setup       --"

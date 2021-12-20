@@ -9,7 +9,7 @@
 # ░░█████████  █████     ░░████████ ██████ ░░██████ ░░████████░░██████ 
 #  ░░░░░░░░░  ░░░░░       ░░░░░░░░ ░░░░░░   ░░░░░░   ░░░░░░░░  ░░░░░░  
 #-------------------------------------------------------------------------
-
+source /mnt/root/ArchBaseInstall/install.conf
 echo "--------------------------------------"
 echo "--          Network Setup           --"
 echo "--------------------------------------"
@@ -18,6 +18,7 @@ systemctl enable --now NetworkManager
 echo "-------------------------------------------------"
 echo "Setting up mirrors for optimal download          "
 echo "-------------------------------------------------"
+echo ${DISK}
 pacman -S --noconfirm pacman-contrib curl
 pacman -S --noconfirm reflector rsync
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bakup
@@ -189,6 +190,7 @@ linux /vmlinuz-linux
 initrd  /initramfs-linux.img
 EOF
    if lspci | grep -E "NVIDIA|GeForce"; then
+   sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf
    echo "options root=PARTUUID=$(blkid -s PARTUUID -o value ${DISK}2) rw rootflags=subvol=@ nvidia-drm.modeset=1" >> /boot/loader/entries/crusedoarch.conf
 [ ! -d "/etc/pacman.d/hooks" ] && mkdir -p /etc/pacman.d/hooks
 cat <<EOF > /etc/pacman.d/hooks/nvidia
@@ -204,9 +206,8 @@ Depends=mkinitcpio
 When=PostTransaction
 Exec=/usr/bin/mkinitcpio -P
 EOF
-sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf
    else
-   echo "options root=PARTUUID=$(blkid -s PARTUUID -o value ${DISK}2) rw rootflags=subvol=@ nvidia-drm.modeset=1" >> /boot/loader/entries/crusedoarch.conf
+   echo "options root=PARTUUID=$(blkid -s PARTUUID -o value ${DISK}2) rw rootflags=subvol=@" >> /boot/loader/entries/crusedoarch.conf
    fi
 
 fi
