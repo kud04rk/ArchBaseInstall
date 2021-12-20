@@ -152,7 +152,7 @@ echo "username=$username" >> ${HOME}/ArchBaseInstall/install.conf
 fi
 if [ $(whoami) = "root"  ];
 then
-    useradd -m -G wheel,libvirt -s /bin/bash $username 
+    useradd -m -g users -G wheel,audio,video,optical,storage,power -s /bin/bash $username 
 	passwd $username
 	cp -R /root/ArchBaseInstall /home/$username/
     chown -R $username: /home/$username/ArchBaseInstall
@@ -240,6 +240,10 @@ sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/' /et
 sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
 # Replace in the same state
+echo "--------------------------------------"
+echo "--     Setting root password        --"
+echo "--------------------------------------"
+passwd
 cd $pwd
 echo "
 ###############################################################################
