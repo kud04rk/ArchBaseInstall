@@ -71,14 +71,10 @@ PKGS=(
 'cups'
 'dialog'
 'discover'
-'dosfstools'
-'efibootmgr' # EFI boot
 'exfat-utils'
 'extra-cmake-modules'
 'git'
 'gptfdisk'
-'grub'
-'grub-customizer'
 'htop'
 'libnewt'
 'libtool'
@@ -91,7 +87,6 @@ PKGS=(
 'networkmanager'
 'ntp'
 'openssh'
-'os-prober'
 'p7zip'
 'pacman-contrib'
 'rsync'
@@ -177,6 +172,7 @@ if [[ ${bootloader} =~ "grub"  ]]; then
 echo "--------------------------------------"
 echo "-- GRUB EFI Bootloader Install&Check--"
 echo "--------------------------------------"
+pacman -S grub grub-customizer os-prober mtools dosfstools efibootmgr
 
 grub-install --efi-directory=/boot ${DISK}
 
@@ -186,7 +182,7 @@ echo "--------------------------------------"
 echo "-- Systemd EFI Bootloader Install&Check--"
 echo "--------------------------------------"
 bootctl install
-[ ! -d "/boot/loader/entries" ] && mkdir -p /boot/loader/entries
+mkdir -p /boot/loader/entries
 cat <<EOF > /boot/loader/entries/crusedoarch.conf
 title Crusedo Linux  
 linux /vmlinuz-linux  
