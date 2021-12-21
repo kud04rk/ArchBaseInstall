@@ -115,23 +115,32 @@ echo "-------------------------------------------------"
 # determine processor type and install microcode
 # 
 proc_type=$(lscpu | awk '/Vendor ID:/ {print $3}')
-case "$proc_type" in
-	GenuineIntel)
-		print "Installing Intel microcode"
-		pacman -S --noconfirm intel-ucode
+if lscpu | awk '{print $3}' | grep -E "GenuineIntel"; then
+	echo "Installing Intel microcode"
+	pacman -S  intel-ucode --noconfirm
+	proc_ucode=intel-ucode.img
+elif lscpu | awk '{print $3}' | grep -E "AuthenticAMD"; then
+	echo "Installing AMD microcode"
+	pacman -S  amd-ucode --noconfirm
+	proc_ucode=amd-ucode.img
+else
+    echo "CPU not recognized"
+	echo "Which microcode to install (Intel/AMD)"
+	read proctype
+	if [[$proctype =~ "Intel"]]; then
+		echo "Installing Intel microcode"
+		pacman -S  intel-ucode --noconfirm
 		proc_ucode=intel-ucode.img
-		;;
-	AuthenticAMD)
-		print "Installing AMD microcode"
-		pacman -S --noconfirm amd-ucode
+	else
+    	echo "Installing AMD microcode"
+		pacman -S  amd-ucode --noconfirm
 		proc_ucode=amd-ucode.img
-		;;
-esac
+	fi
+fi
 
 # Graphics Drivers find and install
 if lspci | grep -E "NVIDIA|GeForce"; then
-    pacman -S nvidia-dkms nvidia-utils opencl-nvidia libglvnd lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed
-	nvidia-xconfig
+    pacman -S nvidia-dkms nvidia-utils opencl-nvidia libglvnd lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed	
 fi
 
 if lspci | grep -E "Radeon"; then
@@ -211,8 +220,6 @@ EOF
    fi
 
 fi
-
-
 
 
 echo -e "\nEnabling essential services"
