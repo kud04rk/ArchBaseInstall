@@ -125,16 +125,18 @@ elif lscpu | awk '{print $3}' | grep -E "AuthenticAMD"; then
 	proc_ucode=amd-ucode.img
 else
     echo "CPU not recognized"
-	echo "Which microcode to install (Intel/AMD)"
+	echo "Which microcode to install (Intel/AMD/ignore)"
 	read proctype
 	if [[$proctype =~ "Intel"]]; then
 		echo "Installing Intel microcode"
 		pacman -S  intel-ucode --noconfirm
 		proc_ucode=intel-ucode.img
-	else
+	elif [[$proctype =~ "AMD"]]
     	echo "Installing AMD microcode"
 		pacman -S  amd-ucode --noconfirm
 		proc_ucode=amd-ucode.img
+	else
+		echo "User chose not to install microcode"
 	fi
 fi
 
@@ -151,10 +153,10 @@ if lspci | grep -E "Integrated Graphics Controller"; then
     pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils --needed --noconfirm
 fi
 
-if ! source install.conf; then
-	read -p "Please enter username:" username
+
+read -p "Please enter username:" username
 echo "username=$username" >> ${HOME}/ArchBaseInstall/install.conf
-fi
+
 if [ $(whoami) = "root"  ];
 then
     useradd -m -g users -G wheel,audio,video,optical,storage,power -s /bin/bash $username 
