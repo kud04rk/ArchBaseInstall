@@ -135,7 +135,7 @@ else
     	echo "Installing AMD microcode"
 		pacman -S  amd-ucode --noconfirm
 		proc_ucode=amd-ucode.img
-	else
+	elif [[$proctype =~ "ignore"]]; then
 		echo "User chose not to install microcode"
 	fi
 fi
