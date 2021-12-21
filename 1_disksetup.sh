@@ -73,8 +73,9 @@ echo "--------------------------------------"
 pacstrap /mnt base base-devel linux linux-firmware linux-headers archlinux-keyring wget libnewt btrfs-progs --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
-echo "DISK=${DISK}" >> ${HOME}/ArchBaseInstall/install.conf
+
 cp -R ${SCRIPT_DIR} /mnt/root/ArchBaseInstall
+echo "DISK=${DISK}" >> ${HOME}/ArchBaseInstall/install.conf
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 echo "--------------------------------------"
