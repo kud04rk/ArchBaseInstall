@@ -184,7 +184,7 @@ if [[ ${bootloader} =~ "grub"  ]]; then
 echo "--------------------------------------"
 echo "-- GRUB EFI Bootloader Install&Check--"
 echo "--------------------------------------"
-pacman -S grub grub-customizer os-prober mtools dosfstools efibootmgr
+pacman -S grub grub-customizer os-prober mtools dosfstools efibootmgr --noconfirm --needed
 
 grub-install --efi-directory=/boot ${DISK}
 
