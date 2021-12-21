@@ -143,13 +143,9 @@ fi
 # Graphics Drivers find and install
 if lspci | grep -E "NVIDIA|GeForce"; then
     pacman -S nvidia-dkms nvidia-utils opencl-nvidia libglvnd lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed	
-fi
-
-if lspci | grep -E "Radeon"; then
+elif lspci | grep -E "Radeon"; then
     pacman -S xf86-video-amdgpu --noconfirm --needed
-fi
-
-if lspci | grep -E "Integrated Graphics Controller"; then
+elif lspci | grep -E "Integrated Graphics Controller"; then
     pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils --needed --noconfirm
 fi
 
@@ -189,6 +185,23 @@ pacman -S grub grub-customizer os-prober mtools dosfstools efibootmgr --noconfir
 grub-install --efi-directory=/boot ${DISK}
 
 grub-mkconfig -o /boot/grub/grub.cfg
+
+   if lspci | grep -E "NVIDIA|GeForce"; then
+   sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf   
+[ ! -d "/etc/pacman.d/hooks" ] && mkdir -p /etc/pacman.d/hooks
+cat <<EOF > /etc/pacman.d/hooks/nvidia
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia
+
+[Action]
+Depends=mkinitcpio
+When=PostTransaction
+Exec=/usr/bin/mkinitcpio -P
+EOF
 else
 echo "--------------------------------------"
 echo "-- Systemd EFI Bootloader Install&Check--"
