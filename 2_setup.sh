@@ -189,7 +189,8 @@ grub-mkconfig -o /boot/grub/grub.cfg
 if lspci | grep -E "NVIDIA|GeForce"; then
 sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf   
 [ ! -d "/etc/pacman.d/hooks" ] && mkdir -p /etc/pacman.d/hooks
-cat <<EOF > /etc/pacman.d/hooks/nvidia
+
+cat > /etc/pacman.d/hooks/nvidia <<EOL
 [Trigger]
 Operation=Install
 Operation=Upgrade
@@ -201,23 +202,25 @@ Target=nvidia
 Depends=mkinitcpio
 When=PostTransaction
 Exec=/usr/bin/mkinitcpio -P
-EOF
+EOL
+fi
+
 else
 echo "--------------------------------------"
 echo "-- Systemd EFI Bootloader Install&Check--"
 echo "--------------------------------------"
 bootctl install
 mkdir -p /boot/loader/entries
-cat <<EOF > /boot/loader/entries/crusedoarch.conf
+cat > /boot/loader/entries/crusedoarch.conf <<EOL
 title Crusedo Linux  
 linux /vmlinuz-linux  
 initrd  /initramfs-linux.img
-EOF
-   if lspci | grep -E "NVIDIA|GeForce"; then
-   sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf
-   echo "options root=PARTUUID=$(blkid -s PARTUUID -o value ${DISK}2) rw rootflags=subvol=@ nvidia-drm.modeset=1" >> /boot/loader/entries/crusedoarch.conf
+EOL
+if lspci | grep -E "NVIDIA|GeForce"; then
+sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf
+echo "options root=PARTUUID=$(blkid -s PARTUUID -o value ${DISK}2) rw rootflags=subvol=@ nvidia-drm.modeset=1" >> /boot/loader/entries/crusedoarch.conf
 [ ! -d "/etc/pacman.d/hooks" ] && mkdir -p /etc/pacman.d/hooks
-cat <<EOF > /etc/pacman.d/hooks/nvidia
+cat > /etc/pacman.d/hooks/nvidia <<EOL
 [Trigger]
 Operation=Install
 Operation=Upgrade
@@ -229,10 +232,10 @@ Target=nvidia
 Depends=mkinitcpio
 When=PostTransaction
 Exec=/usr/bin/mkinitcpio -P
-EOF
-   else
-   echo "options root=PARTUUID=$(blkid -s PARTUUID -o value ${DISK}2) rw rootflags=subvol=@" >> /boot/loader/entries/crusedoarch.conf
-   fi
+EOL
+else
+echo "options root=PARTUUID=$(blkid -s PARTUUID -o value ${DISK}2) rw rootflags=subvol=@" >> /boot/loader/entries/crusedoarch.conf
+fi
 
 fi
 
