@@ -131,7 +131,7 @@ else
 		echo "Installing Intel microcode"
 		pacman -S  intel-ucode --noconfirm
 		proc_ucode=intel-ucode.img
-	elif [[$proctype =~ "AMD"]]
+	elif [[$proctype =~ "AMD"]]; then
     	echo "Installing AMD microcode"
 		pacman -S  amd-ucode --noconfirm
 		proc_ucode=amd-ucode.img
