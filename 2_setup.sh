@@ -186,8 +186,8 @@ grub-install --efi-directory=/boot ${DISK}
 
 grub-mkconfig -o /boot/grub/grub.cfg
 
-   if lspci | grep -E "NVIDIA|GeForce"; then
-   sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf   
+if lspci | grep -E "NVIDIA|GeForce"; then
+sed -i "s/modules=()/modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)/" /etc/mkinitcpio.conf   
 [ ! -d "/etc/pacman.d/hooks" ] && mkdir -p /etc/pacman.d/hooks
 cat <<EOF > /etc/pacman.d/hooks/nvidia
 [Trigger]
