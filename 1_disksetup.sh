@@ -58,8 +58,8 @@ fi
 ls /mnt | xargs btrfs subvolume delete
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
-btrfs subvolume create /mnt/@var
-btrfs subvolume create /mnt/@snapshots
+#btrfs subvolume create /mnt/@var
+#btrfs subvolume create /mnt/@snapshots
 sleep 5
 umount /mnt
 ;;
@@ -76,10 +76,11 @@ mount -t btrfs -o subvol=@ -L ROOT /mnt
 mkdir /mnt/boot
 mkdir /mnt/boot/efi
 mount -t vfat -L EFIBOOT /mnt/boot/
-mkdir -p /mnt/{home,var,.snapshots}
+#mkdir -p /mnt/{home,var,.snapshots}
+mkdir -p /mnt/home
 mount -t btrfs -o subvol=@home -L ROOT /mnt/home
-mount -t btrfs -o subvol=@var -L ROOT /mnt/var
-mount -t btrfs -o subvol=@snapshots -L ROOT /mnt/.snapshots
+# mount -t btrfs -o subvol=@var -L ROOT /mnt/var
+# mount -t btrfs -o subvol=@snapshots -L ROOT /mnt/.snapshots
 
 if ! grep -qs '/mnt' /proc/mounts; then
     echo "Drive is not mounted can not continue"
