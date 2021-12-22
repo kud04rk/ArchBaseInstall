@@ -72,14 +72,14 @@ reboot now
 esac
 
 # mount target
-mount -o noatime,space_cache,subvol=@ -L ROOT /mnt
+mount -t btrfs -o subvol=@ -L ROOT /mnt
 mkdir /mnt/boot
 mkdir /mnt/boot/efi
 mount -t vfat -L EFIBOOT /mnt/boot/
 mkdir -p /mnt/{home,var,.snapshots}
-mount -o noatime,space_cache,subvol=@home -L ROOT /mnt/home
-mount -o noatime,space_cache,subvol=@var -L ROOT /mnt/var
-mount -o noatime,space_cache,subvol=@snapshots -L ROOT /mnt/.snapshots
+mount -t btrfs -o subvol=@home -L ROOT /mnt/home
+mount -t btrfs -o subvol=@var -L ROOT /mnt/var
+mount -t btrfs -o subvol=@snapshots -L ROOT /mnt/.snapshots
 
 if ! grep -qs '/mnt' /proc/mounts; then
     echo "Drive is not mounted can not continue"
