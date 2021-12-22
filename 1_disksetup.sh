@@ -43,7 +43,7 @@ echo "****Please enter the size(MB) of SWAP file****"
 read swapsize
 
 sgdisk -n 1::+1024M --typecode=1:ef00 --change-name=1:'EFIBOOT' ${DISK} # partition 1 (UEFI Boot Partition)
-sgdisk -n 2::+${swapsize} --typecode=2:8200 --change-name=2:'SWAP' ${DISK} # partition 2 (swap), default start, remaining
+sgdisk -n 2::+${swapsize}M --typecode=2:8200 --change-name=2:'SWAP' ${DISK} # partition 2 (swap), default start, remaining
 sgdisk -n 3::-0 --typecode=2:8300 --change-name=3:'ROOT' ${DISK} # partition 3 (Root), default start, remaining
 
 
