@@ -160,7 +160,13 @@ then
 	cp -R /root/ArchBaseInstall /home/$username/
     chown -R $username: /home/$username/ArchBaseInstall
 	read -p "Please name your machine:" nameofmachine
-	echo $nameofmachine > /etc/hostname
+	echo $nameofmachine > /etc/hostname	
+	cat > /etc/hosts <<EOL
+127.0.0.1	localhost
+::1		localhost
+EOL
+echo "${nameofmachine}.localdomain	${nameofmachine}" >> /etc/hosts
+
 else
 	echo "You are already a user proceed with aur installs"
 fi
@@ -174,13 +180,13 @@ echo "--------------------------------------"
 
 
 echo "Select which Bootloader to install (grub/systemd) "
-echo "Type the name of Bootloader"
+echo "Type the name of Bootloader systemd NOT working"
 read bootloader
 if [[ ${bootloader} =~ "grub"  ]]; then
 echo "--------------------------------------"
 echo "-- GRUB EFI Bootloader Install&Check--"
 echo "--------------------------------------"
-pacman -S grub grub-customizer os-prober mtools dosfstools efibootmgr --noconfirm --needed
+pacman -S grub grub-customizer os-prober mtools dosfstools efibootmgr grub-btrfs --noconfirm --needed
 
 grub-install --efi-directory=/boot ${DISK}
 
