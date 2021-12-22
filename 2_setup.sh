@@ -210,7 +210,12 @@ When=PostTransaction
 Exec=/usr/bin/mkinitcpio -P
 EOL
 fi
-
+if lspci | grep -E "Radeon"; then
+    sed -i "s/modules=()/modules=(amdgpu radeon)/" /etc/mkinitcpio.conf   
+fi
+echo "--------------------------------------"
+echo "-- based on graphics many options can be set--"
+echo "--------------------------------------"
 else
 echo "--------------------------------------"
 echo "-- Systemd EFI Bootloader Install&Check--"

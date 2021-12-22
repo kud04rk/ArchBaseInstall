@@ -58,7 +58,7 @@ fi
 ls /mnt | xargs btrfs subvolume delete
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
-#btrfs subvolume create /mnt/@var
+btrfs subvolume create /mnt/@var
 #btrfs subvolume create /mnt/@snapshots
 sleep 5
 umount /mnt
@@ -79,7 +79,8 @@ mount -t vfat -L EFIBOOT /mnt/boot/
 #mkdir -p /mnt/{home,var,.snapshots}
 mkdir -p /mnt/home
 mount -t btrfs -o subvol=@home -L ROOT /mnt/home
-# mount -t btrfs -o subvol=@var -L ROOT /mnt/var
+mkdir -p /mnt/var
+mount -t btrfs -o subvol=@var -L ROOT /mnt/var
 # mount -t btrfs -o subvol=@snapshots -L ROOT /mnt/.snapshots
 
 if ! grep -qs '/mnt' /proc/mounts; then
@@ -93,7 +94,7 @@ fi
 echo "--------------------------------------"
 echo "-- Arch Install on Main Drive       --"
 echo "--------------------------------------"
-pacstrap /mnt base base-devel linux linux-firmware linux-headers archlinux-keyring wget libnewt btrfs-progs snapper --noconfirm --needed
+pacstrap /mnt base base-devel linux linux-firmware linux-headers archlinux-keyring wget libnewt btrfs-progs --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 echo "DISK=${DISK}" >> ${HOME}/ArchBaseInstall/install.conf
