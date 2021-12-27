@@ -1,6 +1,8 @@
 # ArchBaseInstall
  Arch linux base install script.
-  NOTE: SYSTEMD BOOT DOESNT WORK
+  NOTE: SYSTEMD BOOT DOESNT WORK.AMD GPU NOT TESTED
+  Tested With only integrated gpu and nvidia gpu.
+
  This script is used to install the base package of the linux system with btrfs file system.
  
  CHANGE THE LANGUGE AND LOCALES BEFORE USING THE SCRIPT
