@@ -37,3 +37,8 @@ station device connect SSID
 https://wiki.archlinux.org/title/Network_configuration/Wireless
 
 https://wiki.archlinux.org/title/Iwd
+
+## To use a desktop environment use the script in the below link.
+```
+https://github.com/smsriharsha/KdeInstall.git
+```
