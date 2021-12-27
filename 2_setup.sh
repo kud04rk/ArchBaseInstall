@@ -179,7 +179,7 @@ echo "--         Bootloader Install       --"
 echo "--------------------------------------"
 
 
-echo "Select which Bootloader to install (grub/systemd) "
+echo "Select which Bootloader to install (grub) "
 echo "Type the name of Bootloader systemd NOT working"
 read bootloader
 if [[ ${bootloader} =~ "grub"  ]]; then
@@ -211,7 +211,8 @@ Exec=/usr/bin/mkinitcpio -P
 EOL
 fi
 if lspci | grep -E "Radeon"; then
-    sed -i "s/modules=()/modules=(amdgpu radeon)/" /etc/mkinitcpio.conf   
+    sed -i "s/modules=()/modules=(amdgpu radeon)/" /etc/mkinitcpio.conf 
+	mkinitcpio -P  
 fi
 echo "--------------------------------------"
 echo "-- based on graphics many options can be set--"
