@@ -43,7 +43,8 @@ https://wiki.archlinux.org/title/Iwd
 https://github.com/smsriharsha/KdeInstall.git
 ```
 
- #Credits
+ # Credits
+ 
  Chris titus tech
  ```
  https://github.com/ChrisTitusTech/ArchTitus.git
