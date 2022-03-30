@@ -1,7 +1,7 @@
 # ArchBaseInstall
  Arch linux base install script.
   
-  ##NOTE: 
+  ## NOTE: 
   
   SYSTEMD BOOT DOESNT WORK.AMD GPU NOT TESTED
   Tested With only integrated gpu and nvidia gpu.
