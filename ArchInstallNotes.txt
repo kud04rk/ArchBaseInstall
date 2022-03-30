@@ -1,0 +1,216 @@
+arch linux install 
+
+# ls /sys/firmware/efi/efivars ( to check boot mode)
+lsblk for listing the drives 
+
+hdparm -i /dev/sda /b/c/d : to find the hardware info of the drive
+
+gdisk /dev/sd*  to clean the drive and do hardware level stuff
+
+x for expert mode
+z flag to clean the whole drive
+
+(for new users)
+cfdisk /dev/sd*
+gpt or mdr
+
+boot : bios boot(for bios boot) and grub needs to be used
+or
+boot: efi (for uefi) and systemd boot or grub can be used
+ swap:
+root:
+home:
+
+grub has more features:
+https://wiki.archlinux.org/title/Arch_boot_process#Boot_loader
+(for advanced users)
+cgdisk /dev/sd*
+
+new
+
+create boot(1024MiB , root,home and swap( same as ram for hybernate option else something less)
+GiB
+boot code:EF00
+swap space:8200(code) 
+root: min 20GiB 8300
+home: all remaining space
+
+write
+quit
+check using lsblk
+
+formating to respective types
+boot: mkfs.fat -F32 /dev/sd*1
+swap: mkswap /dev/sd*2
+swapon /dev/sd*2
+root: mkfs.ext4 /dev/sd*3
+home:mkfs.ext4 /dev/sd*4
+
+mount the folders
+mount the root drive first:
+mount /dev/sd*3 /mnt
+
+make dirs inside root for 
+mounting  the boot and home
+
+mkdir /mnt/boot
+mkdir /mnt/home
+
+mount /dev/sd*1 /mnt/boot (dont mount for grub)
+mount /dev/sd*4 /mnt/home
+
+get mirrors sorted
+
+
+rank them and use best
+backup the mirrorlist
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+
+for internet 
+ip link
+rfkill : https://wiki.archlinux.org/title/Network_configuration/Wireless#Rfkill_caveat
+rfkill list
+rfkill unblock all
+
+iwctl https://wiki.archlinux.org/title/Iwd#iwctl
+iwctl
+[iwd]# device list
+[iwd]# station device scan
+[iwd]# station device get-networks
+[iwd]# station device connect SSID
+install rankmirrors
+ pacman -Sy (to sync the repos)
+pacman -S pacman-contrib    --(for rank mirrors)
+
+rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+
+install arch linux
+lsblk and check
+ pacstrap -i /mnt base base-devel linux( or linux-lts) linux-headers linux-firmware
+enter all
+create the fstab file:
+genfstab -U -p /mnt >> /mnt/etc/fstab
+
+
+load into new installation
+arch-chroot /mnt
+install nano and bash -completion
+pacman -S nano bash-completion
+
+
+set system locale
+nano /etc/locale.gen
+Edit /etc/locale.gen and uncomment en_US.UTF-8 UTF-8
+locale-gen
+echo LANG=en_US.UTF-8 > /etc/locale.conf
+export LANG=en_US.UTF-8
+
+ls /usr/share/zoneinfo
+ln -s /usr/share/zoneinfo/Asia/Kolkata > /etc/localtime
+
+hwclock --systohc --utc
+
+hostname create
+echo crusedo > /etc/hostname
+
+
+
+enable 32bit apps  using multilib
+
+nano /etc/pacman.conf
+
+uncomment multilib and its below line
+pacman -Sy
+
+enable auto trim for ssd
+systemctl enable fstrim.timer
+
+set root password
+passwd 
+
+useradd -m -g users -G wheel,audio,video,optical,storage,power -s /bin/bash turaro(username)
+passwd turaro
+
+EDITOR=nano visudo
+
+uncomment wheel line
+
+add: Defaults rootpw
+
+mount -t efivarfs efivarfs /sys/firmware/efi/efivars/
+pacman -S intel-ucode
+systemd boot
+bootctl install 
+nano /boot/loader/entries/astroboot.conf
+title astro arch linux
+linux /vmlinuz-linux
+initrd /initramfs-linux.img
+
+echo "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sd*3) rw " >> /boot/loader/entries/astroboot.conf
+
+grub boot uefi 
+https://wiki.archlinux.org/title/GRUB#Installation_2
+
+pacman -S grub
+
+pacman -S efibootmgr dosfstools os-prober mtools
+
+
+mkdir boot/EFI
+
+mount /dev/sda1 /boot/EFI
+
+grub-install -- target=x86_64-efi  --bootloader-id=grub_uefi --recheck
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+grub install boot mode
+mount the partitions
+
+grub-install /dev/sd*
+
+install network stuff
+pacman -S dhcpcd
+ systemctl enable dhcpcd@wlan0.service (do for both lan and wifi)(didnot work delay startup)(did not work)
+
+pacman -S networkmanager
+
+systemctl enable NetworkManager.service
+ 
+install nvidia card drivers
+pacman -S linux-headers
+
+pacman -S nvidia-dkms nvidia-utils opencl-nvidia libglvnd lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings
+
+nano /etc/mkinitcpio.conf
+modules=( nvidia nvidia_modeset nvidia_uvm nvidia_drm)
+
+
+nano /boot/loader/entries/astroboot.conf
+at the end of file in the same options line 
+nvidia-drm.modeset=1
+
+to have drivers on multiple kernels create a hook
+
+mkdir  /etc/pacman.d/hooks
+nano /etc/pacman.d/hooks/nvidia
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia
+
+[Action]
+Depends=mkinitcpio
+When=PostTransaction
+Exec=/usr/bin/mkinitcpio -P
+
+exit
+now reboot
+
+installing desktop env
+
+nvidia-xconfig after xorg
+
+

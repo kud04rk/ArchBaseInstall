@@ -1,0 +1,99 @@
+arch linux errors and solutions
+networking:
+before install
+rfkill
+iwctl
+
+after install:
+networkmanager
+nmtui
+
+uuid
+blkid /dev/sda
+
+
+btrfs:
+https://www.youtube.com/watch?v=sm_fuBeaOqE 
+at 8 min mark 
+
+better file system
+similar to ext 4 we just format partition in btrfs
+
+generally only one partition is created.
+but multiple can be created
+
+commands:
+https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Snapshots
+https://wiki.archlinux.org/title/btrfs#Snapshots
+
+firmat: mkfs.btrfs -L "ROOT" "/dev/sda2" -f
+creating subvolumes:
+these are like folders which act like virtual partitions that can be mounted.(meaning linked(accessed) from that mount point.)
+
+in ext4 generally to separate the home parition a separate parition is created but in btrfs a subvolume can do the job.
+
+so, multiple subvolumes for each partition are created 
+root subvolume is created at @: btrfs subvolume create /mnt/@
+home at @home : btrfs subvolume create /mnt/@home
+
+generally these two are sufficient but we can also create:
+@var: btrfs subvolume create /mnt/@var
+@snapshots btrfs subvolume create /mnt/@snapshots 
+
+these subvols are then mounted by creating folders in the @
+order is important:
+mount -o noatime,compress=lzo,space_cache,subvol=@ /dev/sda2 /mnt
+mkdir -p /mnt/{boot,home,var,.snapshots}
+mount -o noatime,compress=lzo,space_cache,subvol=@home /dev/sda2 /mnt/home
+mount -o noatime,compress=lzo,space_cache,subvol=@var /dev/sda2 /mnt/var
+mount -o noatime,compress=lzo,space_cache,subvol=@snapshots /dev/sda2 /mnt/.snapshots
+
+
+note boot cannot be btrfs (only fat32)
+
+
+
+
+xorg:
+this draws the screen .
+
+xorg->sddm/lightdm->desktop environment 
+
+xorg interfaces with the driver(intel/nvidia)
+by default the xorg.conf file is not needed
+
+two ways to fix these driver issues:
+
+reconfigure the Xorg
+
+X -configure generates a xorg.conf file move it to /etc/x11 and rerun the nvidia-xconfig
+
+
+sddm | gdm | lightdm
+
+GDM, GNOME implementation
+SDDM, recommended display manager for KDE Plasma 5 and LXQt. Successor to KDM.
+LightDM, a lightweight, modular, cross-desktop, fully themeable desktop display manager by Canonical Ltd.
+
+nvidia:
+
+creating hooks in grub helps the user to use multiple linux kernals
+
+linux cant manage nvidia drivers when they are passed through intel drivers
+
+linux can manage:
+intel integrated graphics -> display
+nvidia gpu -> display (dedicated gpu)
+
+linux cant manage:
+if they are non switchable then linux cant handle.
+
+cheap laptops dont have mux to switch the graphics
+nvidia gpu -> intel gpu -> display
+
+this leads to os unable to launch the nvidia-settings
+this wont load nvidia driver as well
+
+
+
+
