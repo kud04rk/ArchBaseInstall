@@ -108,8 +108,8 @@ line number 36 to 44 in 2_setup.sh
  After the install of the script you can continue with the installation of desktop environment or window manager.
 
 # Want to install Arch linux manually ?
-Here is my guide 
-## Struck some where here are a few fixes ..
+Here is my guide https://github.com/smsriharsha/ArchBaseInstall/blob/main/Manual%20install.txt
+## Struck somewhere.. here are a few fixes ..
 https://github.com/smsriharsha/ArchBaseInstall/blob/main/ArchInstall_Errors_Fixes.txt
 # Credits
  
