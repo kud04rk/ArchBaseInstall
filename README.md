@@ -1,4 +1,4 @@
-# ArchBase Install
+# ArchBase Install Script
  This is a simple Arch install script with only one command to run and a few questions to ans.
 
  This script is made with minimal install in mind. Less bloat.
