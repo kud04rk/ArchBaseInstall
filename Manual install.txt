@@ -1,5 +1,4 @@
 arch linux install 
-arch linux install 
 Follow the Arch wiki gruide and mine parallely
 https://wiki.archlinux.org/title/Installation_guide
 Struck somewhere?
@@ -218,5 +217,3 @@ now reboot
 installing desktop env
 
 nvidia-xconfig after xorg
-
-
