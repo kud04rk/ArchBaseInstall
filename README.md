@@ -123,7 +123,7 @@ I have a Open Box script to install the GUI.
 # Preview
 ![5_6188198762796549223](https://user-images.githubusercontent.com/23277835/159973528-02b36055-c773-4690-a218-1f4df88c753f.png)
 
-# Cridits for dotfiles and pictures
+# Credits for dotfiles and pictures
 Harry
 ```
 https://github.com/owl4ce
