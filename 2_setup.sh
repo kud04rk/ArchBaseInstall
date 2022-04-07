@@ -71,7 +71,6 @@ PKGS=(
 'cronie'
 'cups'
 'dialog'
-'discover'
 'exfat-utils'
 'extra-cmake-modules'
 'git'
