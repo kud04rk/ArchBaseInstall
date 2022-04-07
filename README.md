@@ -95,6 +95,21 @@ line number 36 to 44 in 2_setup.sh
 ### My **recommendations** are the end.
 </br></br>
 
+# Known Inssues
+Sometimes the system does not boot properly and goes into maintaince mode.
+## Solution:
+- Login using root in maintaince mode
+- run below command and get the efi boot partitions uuid(copy it)
+```
+blkid
+```
+- nano into /etc/fstab and change the value for the boot partition which you copied 
+
+Also time might not be set properly.
+This can be set after the login into de
+
+
+
 
 # NOTE: 
   
