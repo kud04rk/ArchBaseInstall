@@ -126,6 +126,10 @@ This can be set after the login into de
 Here is my guide https://github.com/smsriharsha/ArchBaseInstall/blob/main/Manual%20install.txt
 ## Struck somewhere.. here are a few fixes ..
 https://github.com/smsriharsha/ArchBaseInstall/blob/main/ArchInstall_Errors_Fixes.txt
+
+# Resource usage after installing
+![IMG_20220407_183611](https://user-images.githubusercontent.com/23277835/162498380-a96bdfd2-1acf-4532-afd4-275b02c48c1c.jpg)
+
 # Credits
  
  Chris titus tech
