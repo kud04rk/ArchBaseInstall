@@ -4,7 +4,7 @@ Follow the Arch wiki gruide and mine parallely
 https://wiki.archlinux.org/title/Installation_guide
 Struck somewhere?
 I have also a Arch erro and fixes that i faced.
-https://github.com/smsriharsha/ArchBaseInstall/blob/main/ArchInstall_Errors_Fixes.txt
+https://github.com/kud04rk/ArchBaseInstall/blob/main/ArchInstall_Errors_Fixes.txt
 
 # ls /sys/firmware/efi/efivars ( to check boot mode)
 lsblk for listing the drives 
