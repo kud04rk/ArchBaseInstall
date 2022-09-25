@@ -8,6 +8,8 @@ After the script completes the neofetch results in just 130 mb of ram usage.
 
 This script is made for imtermediate users.
 
+Last tested on 25-september-2022
+
 To install a Desktop environment Please visit
 https://github.com/kud04rk/OpenboxInstall.git.
 
