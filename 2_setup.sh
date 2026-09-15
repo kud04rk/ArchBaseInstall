@@ -9,6 +9,9 @@
 # ░░█████████  █████     ░░████████ ██████ ░░██████ ░░████████░░██████ 
 #  ░░░░░░░░░  ░░░░░       ░░░░░░░░ ░░░░░░   ░░░░░░   ░░░░░░░░  ░░░░░░  
 #-------------------------------------------------------------------------
+set -euo pipefail
+trap 'echo "ERROR: 2_setup.sh failed at line $LINENO" >&2' ERR
+
 source /root/ArchBaseInstall/install.conf
 if [[ ${DISK} =~ "nvme" ]]; then
     ROOTPART="${DISK}p3"
@@ -19,11 +22,10 @@ echo "--------------------------------------"
 echo "--          Network Setup           --"
 echo "--------------------------------------"
 pacman -S networkmanager dhclient --noconfirm --needed
-systemctl enable --now NetworkManager
+systemctl enable NetworkManager
 echo "-------------------------------------------------"
 echo "Setting up mirrors for optimal download          "
 echo "-------------------------------------------------"
-echo ${DISK}
 pacman -S --noconfirm pacman-contrib curl
 pacman -S --noconfirm reflector rsync
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bakup
@@ -107,7 +109,9 @@ PKGS=(
 #installing additional packages
 for PKG in "${PKGS[@]}"; do
     echo "INSTALLING: ${PKG}"
-    pacman -S "$PKG" --noconfirm --needed
+    if ! pacman -S "$PKG" --noconfirm --needed; then
+        echo "WARNING: failed to install ${PKG}, continuing" >&2
+    fi
 done
 
 # Add sudo no password rights
@@ -266,8 +270,7 @@ fi
 
 echo -e "\nEnabling essential services"
 systemctl enable cups.service
-ntpd -qg
-systemctl enable ntpd.service
+systemctl enable systemd-timesyncd.service
 systemctl enable NetworkManager.service
 systemctl enable bluetooth
 echo "-------------------------------------------------"
